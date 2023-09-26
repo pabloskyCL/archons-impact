@@ -6,11 +6,14 @@ abstract class CharactersBuildCreator
 {
     protected $allHashes;
     protected $skills;
+    protected $nameCards;
 
     public function __construct()
     {
         $allHashesJson = file_get_contents(base_path().'/utils/hashes.json');
         $skillsJson = file_get_contents(base_path().'/utils/skills.json');
+        $nameCardJson = file_get_contents(base_path().'/utils/namecards.json');
+        $this->nameCards = json_decode($nameCardJson, true);
         $this->skills = json_decode($skillsJson, true);
         $this->allHashes = json_decode($allHashesJson, true);
     }
@@ -60,6 +63,26 @@ abstract class CharactersBuildCreator
     public function setSkills($skills)
     {
         $this->skills = $skills;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of nameCard.
+     */
+    public function getNameCard()
+    {
+        return $this->nameCards;
+    }
+
+    /**
+     * Set the value of nameCard.
+     *
+     * @return self
+     */
+    public function setNameCard($nameCard)
+    {
+        $this->nameCards = $nameCard;
 
         return $this;
     }

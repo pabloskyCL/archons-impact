@@ -26,7 +26,7 @@ class EnkaNetworkService
 
         $characterBuilder = new CharacterBuilder();
         if ($charactersData['playerInfo']) {
-            $formatedPlayerData = $this->playerDataFormater($charactersData['playerInfo'], $characterBuilder->getCharacterData());
+            $formatedPlayerData = $this->playerDataFormater($charactersData['playerInfo'], $characterBuilder);
         }
 
         if ($charactersData['avatarInfoList']) {
@@ -41,12 +41,16 @@ class EnkaNetworkService
         return $this->repository->getAll($charactersDTO);
     }
 
-    public function playerDataFormater($playerData, $charactersData)
+    public function playerDataFormater($playerData, CharacterBuilder $charactersBuilder)
     {
+        $charactersData = $charactersBuilder->getCharacterData();
+        $nameCardData = $charactersBuilder->getNameCard();
         $characterAvatarId = (string) $playerData['profilePicture']['avatarId'];
 
         $characterAvatar = $charactersData[$characterAvatarId];
+        $nameCardURL = array_pop($nameCardData[$playerData['nameCardId']]['picPath']);
         $playerData['profilePicture']['avatarIconURL'] = 'https://enka.network/ui/'.$characterAvatar['icon'].'.png';
+        $playerData['profilePicture']['nameCardImage'] = 'https://enka.network/ui/'.$nameCardURL.'.png';
 
         return $playerData;
     }
@@ -60,11 +64,12 @@ class EnkaNetworkService
         foreach ($playerCharacterData as $characterStats) {
             $characterId = $characterStats['avatarId'];
             $character = $characterData[$characterId];
-
             $characterName = $allHashes['es'][$character['nameTextMapHash']];
             $skills = $this->formatedSkillsByCharacter($character, $characterStats['skillLevelMap'], $characterBuilder->getSkills());
             $characterArtifacts = $this->formatedCharacterArtifacts($characterStats['equipList'], $characterBuilder);
             $totalCharacterStats = $this->formatedTotalStats($characterStats['fightPropMap'], $this->jsonDataParser->getFightProps());
+            $avatarInfoList[$characterName]['icon'] = $character['icon'];
+            $avatarInfoList[$characterName]['gachaIcon'] = $character['gachaIcon'];
             $avatarInfoList[$characterName]['skills'] = $skills;
             $avatarInfoList[$characterName]['artifacts'] = $characterArtifacts;
             $avatarInfoList[$characterName]['totalStats'] = $totalCharacterStats;

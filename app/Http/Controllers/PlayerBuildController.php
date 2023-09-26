@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\DTO\CharactersDTO;
+use App\Services\EnkaNetworkService;
+use Illuminate\Http\Request;
+use Inertia\Inertia;
+
+class PlayerBuildController extends Controller
+{
+    private EnkaNetworkService $enkaService;
+
+    public function __construct(EnkaNetworkService $enkaService)
+    {
+        $this->enkaService = $enkaService;
+    }
+
+    public function index(Request $request)
+    {
+        $return = $request->validate([
+            'uid' => ['required', 'min:9', 'max:9'],
+        ]);
+
+        $characters = $this->enkaService->getAllCharacters(CharactersDTO::FromRequestMaker($request));
+
+        return Inertia::render('Player/Build', ['characters' => $characters]);
+    }
+}

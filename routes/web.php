@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PlayerBuildController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\TestController;
 use Illuminate\Foundation\Application;
@@ -28,6 +29,7 @@ Route::get('/', function () {
 });
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/playerbuild', [PlayerBuildController::class, 'index'])->middleware(['auth', 'verified'])->name('playerBuild');
 
 // Route::resource('dashboard', DashboardController::class)
 //     ->only(['index'])
