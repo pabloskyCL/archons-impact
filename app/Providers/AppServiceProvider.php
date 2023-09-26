@@ -2,6 +2,8 @@
 
 namespace App\Providers;
 
+use App\Repositories\CharacterRepositoryEloquentORM;
+use App\Repositories\CharacterRepositoryInterface;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -11,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(CharacterRepositoryInterface::class, CharacterRepositoryEloquentORM::class);
     }
 
     /**
@@ -19,6 +21,5 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
     }
 }
