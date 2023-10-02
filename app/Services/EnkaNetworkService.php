@@ -21,17 +21,30 @@ class EnkaNetworkService
     {
         $charactersData = $this->repository->getAll($charactersDTO);
 
+        if (isset($charactersData['error'])) {
+            return $charactersData;
+        }
+
         $formatedPlayerData = [];
         $formatedCharactersData = [];
 
         $characterBuilder = new CharacterBuilder();
-        if ($charactersData['playerInfo']) {
-            $formatedPlayerData = $this->playerDataFormater($charactersData['playerInfo'], $characterBuilder);
+        if (!isset($charactersData['playerInfo'])) {
+            return ['error' => [
+                'message' => 'Esta cuenta tiene muy poco nivel, no se puede hacer la busqueda',
+                'statusCode' => 401],
+            ];
         }
 
-        if ($charactersData['avatarInfoList']) {
-            $formatedCharactersData = $this->playerCharacterDataFormater($charactersData['avatarInfoList'], $characterBuilder);
+        if (!isset($charactersData['avatarInfoList'])) {
+            return ['error' => [
+                'message' => 'Esta cuenta no tiene personajes compartidos en su perfil',
+                'statusCode' => 401],
+            ];
         }
+
+        $formatedCharactersData = $this->playerCharacterDataFormater($charactersData['avatarInfoList'], $characterBuilder);
+        $formatedPlayerData = $this->playerDataFormater($charactersData['playerInfo'], $characterBuilder);
 
         return ['playerData' => $formatedPlayerData, 'characterData' => $formatedCharactersData];
     }
@@ -45,7 +58,7 @@ class EnkaNetworkService
     {
         $charactersData = $charactersBuilder->getCharacterData();
         $nameCardData = $charactersBuilder->getNameCard();
-        $characterAvatarId = (string) $playerData['profilePicture']['avatarId'];
+        $characterAvatarId = (string) isset($playerData['profilePicture']['avatarId']) ? $playerData['profilePicture']['avatarId'] : '10000007';
 
         $characterAvatar = $charactersData[$characterAvatarId];
         $nameCardURL = array_pop($nameCardData[$playerData['nameCardId']]['picPath']);

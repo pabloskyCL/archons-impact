@@ -2,23 +2,30 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
 import { useForm } from '@inertiajs/react';
+import ErrorAlert from '@/Components/ErrorAlert';
 
 export default function Index({ auth }: PageProps<{ characters: any }>) {
 
     const { data, setData, get, processing, errors } = useForm({
         uid: ''
     });
-
+    console.log(errors.uid);
     const getCharacters = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
         get('/playerbuild');
     }
 
+    if (processing) {
+        return (<div>
+            Loading ...
+        </div>);
+    }
 
     return (
         <AuthenticatedLayout
             user={auth.user}
         >
+            {errors.uid && <ErrorAlert message={errors.uid} />}
             <div className="py-12 grid place-items-center">
                 <div className="max-w-5xl sm:px-6 lg:px-8">
                     <div className="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg">

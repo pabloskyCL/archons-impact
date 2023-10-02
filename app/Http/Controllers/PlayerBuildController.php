@@ -24,6 +24,6 @@ class PlayerBuildController extends Controller
 
         $characters = $this->enkaService->getAllCharacters(CharactersDTO::FromRequestMaker($request));
 
-        return Inertia::render('Player/Build', ['characters' => $characters]);
+        return Inertia::render('Player/Build', ['characters' => $characters, 'error' => isset($characters['error']) ? $characters : []]);
     }
 }
