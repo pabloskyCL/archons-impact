@@ -17,7 +17,16 @@ class CharacterRepositoryEloquentORM implements CharacterRepositoryInterface
     {
         $url = 'https://enka.network/api/uid/'.$characterDTO->uid;
 
+        // code...
         $response = Http::get($url);
+        if ($response->clientError()) {
+            return ['error' => [
+                'message' => 'Ha ocurrido un error con la fuente de datos, intentar mas tarde',
+                'statusCode' => $response->status()],
+            ];
+        }
+
+        // $response->throw();
 
         return $response->json();
     }
