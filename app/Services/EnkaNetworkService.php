@@ -3,7 +3,7 @@
 namespace App\Services;
 
 use App\Client\EnkaApiClient;
-use App\DTO\CharactersDTO;
+use App\DTO\PlayerDTO;
 use App\Repositories\EnkaApiRepository;
 
 class EnkaNetworkService
@@ -20,14 +20,14 @@ class EnkaNetworkService
         $this->enkaApiRepository = $enkaApiRepository;
     }
 
-    public function getAllCharacters(CharactersDTO $charactersDTO)
+    public function getAllCharacters(PlayerDTO $charactersDTO)
     {
         $allPlayerData = $this->enkaApiClient->getAllPlayerData($charactersDTO);
 
         return $this->enkaApiRepository->getAll($allPlayerData);
     }
 
-    public function getAllProfileData(CharactersDTO $charactersDTO)
+    public function getAllProfileData(PlayerDTO $charactersDTO)
     {
     }
 }
