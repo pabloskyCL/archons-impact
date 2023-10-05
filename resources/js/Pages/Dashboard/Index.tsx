@@ -49,8 +49,12 @@ export default function Index({ auth }: PageProps<{ characters: any }>) {
                     </div>
                 </div>
             </div>
-
-
+           <div className='container'>
+                <div className='flex flex-row justify-center gap-16 space-x-8'>
+                    <div className='w-1/2  rounded-lg bg-slate-800 text-white'>hola buenas esto es el instructivo</div>
+                    <div className='w-1/2  rounded-lg bg-slate-800'>hola</div>
+                </div>
+            </div>
         </AuthenticatedLayout>
     );
 }
