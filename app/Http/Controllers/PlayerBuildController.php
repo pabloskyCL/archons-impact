@@ -26,4 +26,15 @@ class PlayerBuildController extends Controller
 
         return Inertia::render('Player/Build', ['characters' => $characters, 'error' => isset($characters['error']) ? $characters['error'] : []]);
     }
+
+    public function compareBuild(Request $request)
+    {
+        $request->validate([
+            'uid' => ['required', 'min:9', 'max:9'],
+        ]);
+
+        $characters = $this->enkaService->getAllCharacters(PlayerDTO::createFromRequestMaker($request));
+
+        return Inertia::render('Player/Build', ['compareCharacters' => $characters, 'error' => isset($characters['error']) ? $characters['error'] : []]);
+    }
 }

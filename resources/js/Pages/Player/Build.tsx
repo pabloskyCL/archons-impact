@@ -1,17 +1,17 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head } from '@inertiajs/react';
 import { PageProps } from '@/types';
-import { useForm } from '@inertiajs/react';
+import { useForm, router } from '@inertiajs/react';
 import CharacterButton from '@/Components/CharacterButton';
 import ErrorAlert from '@/Components/ErrorAlert';
 import { useState } from 'react';
-import ArtifactList from '@/Components/ArtifactList';
-import SkillList from '@/Components/SkillList';
 import CharacterStats from '@/Components/CharacterStats';
+
 // TODO crear tipo para los parametros
-export default function Build({ auth, characters }: PageProps<{ characters: any }>) {
+export default function Build({ auth, characters, compareCharacters }: PageProps<{ characters: any, compareCharacters: any | null }>) {
     const [selectedCharacter, setSelectedCharacter] = useState<any | null>(null);
     const [toggleCompareCharacter, setToggleCompareCharacter] = useState<Boolean | null>(false);
+    const [selectedCompareCharacter, setSelectedCompareCharacter] = useState<any | null>(null);
 
 
     const handleSelectCharacter = (character: any) => {
@@ -29,7 +29,20 @@ export default function Build({ auth, characters }: PageProps<{ characters: any 
         uid: ''
     });
 
-    const getComparePlayerData = () => {
+
+    const compareCharacterSelected = () => {
+        if (compareCharacters.characterData[selectedCharacter.name]) {
+            return { ...compareCharacters.characterData[selectedCharacter.name], name: selectedCharacter.name };
+        }
+        return null;
+    }
+
+    const getComparePlayerData = (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+        get('/comparebuild', {
+            preserveState: true,
+            only: ['compareCharacters']
+        });
 
     }
 
@@ -73,7 +86,7 @@ export default function Build({ auth, characters }: PageProps<{ characters: any 
                             <div className="text-4xl text-white text-start">Personajes</div>
                         </div>
                         <div className='content-center'>
-                            <button onClick={handleCompareCharacterButton} className='text-white text-lg font-bold bg-slate-800 p-5 hover:bg-slate-700'>comparar personajes</button>
+                            <button onClick={handleCompareCharacterButton} className='text-white text-lg font-bold bg-slate-800 p-5 hover:bg-slate-700'>Comparar personajes</button>
                         </div>
                     </div>
 
@@ -85,9 +98,11 @@ export default function Build({ auth, characters }: PageProps<{ characters: any 
                             // inicio caracteristicas generales
                             <CharacterStats selectedCharacter={selectedCharacter} toggleCompareCharacter={toggleCompareCharacter} />
                             // termino de caracteristicas generales
-
                         }
-                        {toggleCompareCharacter &&
+                        {compareCharacters && selectedCharacter &&
+                            <CharacterStats selectedCharacter={compareCharacterSelected()} toggleCompareCharacter={toggleCompareCharacter} />
+                        }
+                        {toggleCompareCharacter && compareCharacters == null &&
                             <div className="w-full lg:w-2/4 px-4">
                                 <div className="bg-slate-700 px-10 py-10 rounded-xl">
                                     <form onSubmit={getComparePlayerData}>
@@ -108,6 +123,8 @@ export default function Build({ auth, characters }: PageProps<{ characters: any 
                                 </div>
                             </div>
                         }
+
+
                     </div>
 
                 </div>

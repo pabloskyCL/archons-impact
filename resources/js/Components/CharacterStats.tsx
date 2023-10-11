@@ -9,16 +9,10 @@ interface CharacterStatsProps {
 }
 
 export default function CharacterStats({ selectedCharacter, toggleCompareCharacter }: CharacterStatsProps) {
-
-   
-
-
-    
-
     return (
 
         <div className="w-full px-4 lg:w-2/4">
-            {selectedCharacter &&
+            {selectedCharacter ?
                 <div className="mb-6 flex w-full min-w-0 flex-col break-words rounded-lg">
                     <div className="flex w-full justify-center mt-3">
                         <div className="">
@@ -110,9 +104,11 @@ export default function CharacterStats({ selectedCharacter, toggleCompareCharact
                         <ArtifactList artifactList={selectedCharacter.artifacts} />
                     </div>
 
+                </div> : <div className="text-center">
+                    <span className="text-white mb-2 text-4xl font-semibold leading-normal"> El jugador no tiene publicas las estadisticas de este personaje</span>
                 </div>}
 
-            
+
         </div>
     );
 }
