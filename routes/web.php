@@ -30,6 +30,7 @@ Route::get('/', function () {
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 Route::get('/playerbuild', [PlayerBuildController::class, 'index'])->middleware(['auth', 'verified'])->name('playerBuild');
+Route::get('/comparebuild', [PlayerBuildController::class, 'compareBuild'])->middleware(['auth', 'verified'])->name('compareBuild');
 
 // Route::resource('dashboard', DashboardController::class)
 //     ->only(['index'])
