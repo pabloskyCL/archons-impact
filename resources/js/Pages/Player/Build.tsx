@@ -62,7 +62,7 @@ export default function Build({ auth, characters, compareCharacters }: PageProps
                             backgroundBlendMode: 'multiply'
                         }}>
                             <div className="md:w-1/3 justify-center items-center">
-                                <img className="rounded-lg antialiased" src={characters.playerData.profilePicture.avatarIconURL} />
+                                <img className="rounded-lg w-24 h-24 antialiased" src={characters.playerData.profilePicture.avatarIconURL} />
                             </div>
                             <div className="md:w-2/3 w-full px-3 flex flex-row flex-wrap">
                                 <div className="w-full text-left mt-2 text-gray-700 font-semibold relative pt-3 md:pt-0">
